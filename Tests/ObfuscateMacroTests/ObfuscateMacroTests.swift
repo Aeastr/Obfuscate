@@ -4,6 +4,10 @@
 //
 //  Created by Aether on 14/01/2026.
 //
+//  NOTE: These tests verify strings are actually obfuscated (not just decoded correctly).
+//  Due to Xcode limitations with SwiftSyntax macro testing, run via CLI:
+//    xcodebuild test -scheme Obfuscate -destination 'platform=macOS'
+//
 
 import SwiftParser
 import SwiftSyntax
