@@ -10,30 +10,16 @@ import XCTest
 
 final class ObfuscateTests: XCTestCase {
 
-    // MARK: - Base64 (Default)
+    // MARK: - XOR (Default)
 
-    func testBase64() {
+    func testDefault() {
         let result = #Obfuscate("HelloWorld")
         XCTAssertEqual(result, "HelloWorld")
     }
 
-    func testBase64Explicit() {
-        let result = #Obfuscate("TestString", .base64)
-        XCTAssertEqual(result, "TestString")
-    }
-
-    // MARK: - Bytes
-
-    func testBytes() {
-        let result = #Obfuscate("BytesTest", .bytes)
-        XCTAssertEqual(result, "BytesTest")
-    }
-
-    // MARK: - XOR
-
     func testXOR() {
-        let result = #Obfuscate("XORSecret", .xor)
-        XCTAssertEqual(result, "XORSecret")
+        let result = #Obfuscate("XORTest", .xor)
+        XCTAssertEqual(result, "XORTest")
     }
 
     // MARK: - Bit Shift
@@ -48,6 +34,20 @@ final class ObfuscateTests: XCTestCase {
     func testReversed() {
         let result = #Obfuscate("ReverseMe", .reversed)
         XCTAssertEqual(result, "ReverseMe")
+    }
+
+    // MARK: - Base64
+
+    func testBase64() {
+        let result = #Obfuscate("Base64Test", .base64)
+        XCTAssertEqual(result, "Base64Test")
+    }
+
+    // MARK: - Bytes
+
+    func testBytes() {
+        let result = #Obfuscate("BytesTest", .bytes)
+        XCTAssertEqual(result, "BytesTest")
     }
 
     // MARK: - Edge Cases
