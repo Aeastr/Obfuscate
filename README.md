@@ -38,7 +38,7 @@ A Swift macro that obfuscates string literals at compile-time. Hides strings fro
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Aeastr/Obfuscate.git", from: "1.1.0")
+    .package(url: "https://github.com/Aeastr/Obfuscate.git", from: "1.3.0")
 ]
 ```
 
