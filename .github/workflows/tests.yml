@@ -7,12 +7,15 @@ on:
       - 'Sources/**'
       - 'Tests/**'
       - 'Package.swift'
+      - '.github/workflows/tests.yml'
   pull_request:
     branches: [main]
     paths:
       - 'Sources/**'
       - 'Tests/**'
       - 'Package.swift'
+      - '.github/workflows/tests.yml'
+  workflow_dispatch:
 
 jobs:
   test:

@@ -19,7 +19,19 @@
 
 ## Overview
 
-A Swift macro that obfuscates string literals at compile-time. Helps hide sensitive strings from static analysis.
+A Swift macro that obfuscates string literals at compile-time. Hides strings from static analysis tools like `strings`, hex editors, and automated scanners.
+
+**Good for:**
+- Private API usage (class names, selectors)
+- Internal identifiers and feature flags
+- Strings you don't want trivially discoverable
+
+**Not for:**
+- API keys, tokens, or secrets — these should never be in client code
+- Obfuscation ≠ encryption; a determined attacker with a debugger will always win
+
+> [!CAUTION]
+> This raises the bar from "trivial" to "annoying" — it's not real security. If a secret is in your binary, assume it can be extracted.
 
 
 ## Installation
