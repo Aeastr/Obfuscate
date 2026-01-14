@@ -80,19 +80,84 @@ All methods hide strings from basic static analysis (`strings` command, hex edit
 
 At compile-time, the macro transforms your string into executable code that reconstructs it at runtime. The original string never appears in the binary.
 
-**Example (`.xor`):**
-```swift
-#Obfuscate("CAFilter", .xor)
-```
+<details>
+<summary><b>.xor</b> — XOR each byte with a random key</summary>
 
+```swift
+#Obfuscate("Hello", .xor)
+```
 Becomes:
 ```swift
 {
-    let bytes: [UInt8] = [142, 164, 137, ...]  // XOR'd bytes
-    let key: UInt8 = 203                        // Random key
+    let bytes: [UInt8] = [171, 158, 169, 169, 168]  // XOR'd bytes
+    let key: UInt8 = 203                            // Random key (changes each build)
     return String(bytes: bytes.map { $0 ^ key }, encoding: .utf8)!
 }()
 ```
+</details>
+
+<details>
+<summary><b>.bitShift</b> — Rotate bits by a random amount</summary>
+
+```swift
+#Obfuscate("Hello", .bitShift)
+```
+Becomes:
+```swift
+{
+    let bytes: [UInt8] = [144, 202, 216, 216, 222]  // Rotated bytes
+    let shift: UInt8 = 3                            // Random shift (changes each build)
+    return String(bytes: bytes.map { ($0 &>> shift) | ($0 &<< (8 - shift)) }, encoding: .utf8)!
+}()
+```
+</details>
+
+<details>
+<summary><b>.reversed</b> — Store bytes in reverse order</summary>
+
+```swift
+#Obfuscate("Hello", .reversed)
+```
+Becomes:
+```swift
+{
+    let bytes: [UInt8] = [111, 108, 108, 101, 72]  // "olleH" reversed
+    return String(bytes: bytes.reversed(), encoding: .utf8)!
+}()
+```
+</details>
+
+<details>
+<summary><b>.base64</b> — Encode as Base64, store as bytes</summary>
+
+```swift
+#Obfuscate("Hello", .base64)
+```
+Becomes:
+```swift
+{
+    let characters: [UInt8] = [83, 71, 86, 115, 98, 71, 56, 61]  // "SGVsbG8=" as bytes
+    let base64 = String(bytes: characters, encoding: .utf8)!
+    let data = Data(base64Encoded: base64.data(using: .utf8)!)!
+    return String(data: data, encoding: .utf8)!
+}()
+```
+</details>
+
+<details>
+<summary><b>.bytes</b> — Store as raw UTF-8 bytes</summary>
+
+```swift
+#Obfuscate("Hello", .bytes)
+```
+Becomes:
+```swift
+{
+    let bytes: [UInt8] = [72, 101, 108, 108, 111]  // Raw UTF-8
+    return String(bytes: bytes, encoding: .utf8)!
+}()
+```
+</details>
 
 
 ## License
