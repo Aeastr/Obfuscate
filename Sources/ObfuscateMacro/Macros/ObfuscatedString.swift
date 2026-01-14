@@ -10,7 +10,7 @@ import Foundation
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-struct ObfuscatedString: ExpressionMacro {
+public struct ObfuscatedString: ExpressionMacro {
     public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) -> ExprSyntax {
         // Get the string argument
         guard let stringArgument = node.arguments.first?.expression,
