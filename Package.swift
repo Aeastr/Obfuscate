@@ -7,6 +7,10 @@
 
 // swift-tools-version: 6.0
 
+// NOTE: If Xcode shows "Unable to find module dependency: 'SwiftSyntax'" errors,
+// ensure xcode-select points to Xcode.app, not Command Line Tools:
+//   sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
 import PackageDescription
 import CompilerPluginSupport
 
@@ -28,7 +32,7 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swiftlang/swift-syntax", "600.0.0"..<"603.0.0"
+            url: "https://github.com/swiftlang/swift-syntax", from: "600.0.0"
         ),
     ],
     targets: [
@@ -43,6 +47,10 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
             ]
-        )
+        ),
+        .testTarget(
+            name: "ObfuscateTests",
+            dependencies: ["Obfuscate"]
+        ),
     ]
 )

@@ -18,14 +18,14 @@
 
 ## Overview
 
-A Swift macro that obfuscates string literals at compile-time by converting them to Base64-encoded byte arrays. Helps hide sensitive strings from static analysis.
+A Swift macro that obfuscates string literals at compile-time. Helps hide sensitive strings from static analysis.
 
 
 ## Installation
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Aeastr/Obfuscate.git", from: "1.0.0")
+    .package(url: "https://github.com/Aeastr/Obfuscate.git", from: "1.1.0")
 ]
 ```
 
@@ -37,32 +37,62 @@ import Obfuscate
 ## Usage
 
 ```swift
+// Default (XOR)
 let secret = #Obfuscate("MySecretString")
-// Compiles to byte array → Base64 decode → String at runtime
+
+// With explicit method
+let secret = #Obfuscate("MySecretString", .xor)
+let secret = #Obfuscate("MySecretString", .bitShift)
+let secret = #Obfuscate("MySecretString", .reversed)
+let secret = #Obfuscate("MySecretString", .base64)
+let secret = #Obfuscate("MySecretString", .bytes)
 ```
 
 > [!NOTE]
 > Xcode will prompt you to trust macros from this package on first use. This is standard for Swift macro packages—click "Trust & Enable" to proceed.
 
 
+## Methods
+
+All methods hide strings from basic static analysis (`strings` command, hex editors). Ranked by obfuscation strength:
+
+| Rank | Method | Description |
+|:----:|--------|-------------|
+| 1 | `.xor` | XOR with random compile-time key (default) |
+| 2 | `.bitShift` | Bit rotation with random shift amount |
+| 3 | `.reversed` | Bytes stored reversed, flipped at runtime |
+| 4 | `.base64` | String → Base64 → byte array |
+| 5 | `.bytes` | String → raw UTF-8 byte array |
+
+### Which to use?
+
+- **`.xor`** — Best. Random key each build, no recognizable patterns, output varies per compilation.
+- **`.bitShift`** — Very good. Random rotation each build, bytes are transformed beyond recognition.
+- **`.reversed`** — Good. Simple and fast, string isn't readable forwards in the binary.
+- **`.base64`** — Moderate. Recognizable Base64 charset/padding if found, but hides from basic analysis.
+- **`.bytes`** — Minimal. Raw UTF-8 bytes are readable with hex editors. Included for completeness.
+
+> [!TIP]
+> For most use cases, `.xor` or `.bitShift` are recommended. All methods achieve the same goal—the ranking reflects resistance to manual reverse engineering.
+
+
 ## How It Works
 
-At compile-time, the macro transforms:
+At compile-time, the macro transforms your string into executable code that reconstructs it at runtime. The original string never appears in the binary.
+
+**Example (`.xor`):**
 ```swift
-#Obfuscate("CAFilter")
+#Obfuscate("CAFilter", .xor)
 ```
 
-Into:
+Becomes:
 ```swift
 {
-    let characters: [UInt8] = [81, 48, 70, 71, ...]
-    let base64 = String(bytes: characters, encoding: .utf8)!
-    let data = Data(base64Encoded: base64.data(using: .utf8)!)!
-    return String(data: data, encoding: .utf8)!
+    let bytes: [UInt8] = [142, 164, 137, ...]  // XOR'd bytes
+    let key: UInt8 = 203                        // Random key
+    return String(bytes: bytes.map { $0 ^ key }, encoding: .utf8)!
 }()
 ```
-
-The original string never appears in the binary.
 
 
 ## License
