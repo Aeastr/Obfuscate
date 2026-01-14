@@ -6,6 +6,7 @@
 </div>
 
 <p align="center">
+  <a href="https://github.com/Aeastr/Obfuscate/actions/workflows/tests.yml"><img src="https://github.com/Aeastr/Obfuscate/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-6.0+-F05138?logo=swift&logoColor=white" alt="Swift 6.0+"></a>
   <a href="https://developer.apple.com"><img src="https://img.shields.io/badge/iOS-13+-000000?logo=apple" alt="iOS 13+"></a>
   <a href="https://developer.apple.com"><img src="https://img.shields.io/badge/macOS-10.15+-000000?logo=apple" alt="macOS 10.15+"></a>
